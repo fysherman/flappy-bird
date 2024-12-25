@@ -35,13 +35,21 @@ void InitGame();
 void DrawFrame();
 void EndGame();
 
-typedef struct Background
+struct Background
 {
   Texture2D texture;
   float scale;
-} Background;
+};
 
-Background background;
+struct Textures {
+  Texture2D background;
+  Texture2D base;
+  Texture2D pipeGreen;
+  Texture2D birdMidFlap;
+};
+
+struct Textures textures;
+struct Background background;
 
 int main()
 {
@@ -70,7 +78,10 @@ void InitGame()
   SearchAndSetResourceDir("resources");
 
   // Load a texture from the resources directory
-  background.texture = LoadTexture("objects/background_day.png");
+  textures.background = LoadTexture("objects/background_day.png");
+  textures.base = LoadTexture("objects/base.png");
+  textures.birdMidFlap = LoadTexture("objects/yellowbird_midflap.png");
+  background.texture = textures.background;
   background.scale = (float)SCREEN_HEIGHT / background.texture.height;
 }
 
@@ -82,9 +93,16 @@ void DrawFrame()
   // Setup the back buffer for drawing (clear color and depth buffers)
   ClearBackground(BLACK);
 
-  // Draw the background texture
-  DrawTextureEx(background.texture, (Vector2){0, 0}, 0, background.scale, WHITE);
+  float backgroundSize = 0;
 
+  while (backgroundSize < SCREEN_WIDTH) {
+    // Draw the background texture
+    DrawTextureEx(background.texture, (Vector2){backgroundSize, 0}, 0, background.scale, WHITE);
+    backgroundSize += (float)background.texture.width * background.scale;
+  }
+
+  DrawTextureEx(textures.base, (Vector2){0, SCREEN_HEIGHT - textures.base.height / 2}, 0, 1.0f, WHITE);
+  DrawTextureEx(textures.birdMidFlap, (Vector2){ SCREEN_WIDTH  / 2, SCREEN_HEIGHT / 2}, 0, 1.0f, WHITE);
   // end the frame and get ready for the next one  (display frame, poll input, etc...)
   EndDrawing();
 }
@@ -92,7 +110,9 @@ void DrawFrame()
 void EndGame()
 {
   // unload our texture so it can be cleaned up
-  UnloadTexture(background.texture);
+  UnloadTexture(textures.background);
+  UnloadTexture(textures.base);
+  UnloadTexture(textures.birdMidFlap);
 
   // destroy the window and cleanup the OpenGL context
   CloseWindow();
