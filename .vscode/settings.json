@@ -10,6 +10,7 @@
 	},
 	"C_Cpp.errorSquiggles": "enabled",
 	"files.associations": {
-		"raylib.h": "c"
+		"raylib.h": "c",
+		"main.h": "c"
 	}
 }

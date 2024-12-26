@@ -27,29 +27,29 @@ For a C++ project simply rename the file to .cpp and re-run the build script
 #include <stdio.h>
 #include "raylib.h"
 #include "resource_dir.h" // utility header for SearchAndSetResourceDir
+#include "main.h"
+#include "bird.h"
+#include "pipe.h"
 
-const int SCREEN_WIDTH = 500;
-const int SCREEN_HEIGHT = 500;
+Textures textures;
 
-void InitGame();
-void DrawFrame();
-void EndGame();
+Texture2D birdTextures[3];
 
-struct Background
-{
-  Texture2D texture;
-  float scale;
-};
+Game game = {START, 0, 0, 0};
 
-struct Textures {
-  Texture2D background;
-  Texture2D base;
-  Texture2D pipeGreen;
-  Texture2D birdMidFlap;
-};
+Pipe pipe = {100, 200};
 
-struct Textures textures;
-struct Background background;
+Bird bird = {
+    {(float)SCREEN_WIDTH / 2, (float)SCREEN_HEIGHT / 2},
+    0,
+    0,
+    0.2f,
+    4.0f,
+    7.0f,
+    0.2f,
+    {{0, 0}, {0, 0}, {0, 0}}};
+
+pipes[MAX_PIPES];
 
 int main()
 {
@@ -81,8 +81,13 @@ void InitGame()
   textures.background = LoadTexture("objects/background_day.png");
   textures.base = LoadTexture("objects/base.png");
   textures.birdMidFlap = LoadTexture("objects/yellowbird_midflap.png");
-  background.texture = textures.background;
-  background.scale = (float)SCREEN_HEIGHT / background.texture.height;
+  textures.birdDownFlap = LoadTexture("objects/yellowbird_downflap.png");
+  textures.birdUpFlap = LoadTexture("objects/yellowbird_upflap.png");
+  textures.pipeGreen = LoadTexture("objects/pipe_green.png");
+
+  bird.textures[0] = textures.birdDownFlap;
+  bird.textures[1] = textures.birdMidFlap;
+  bird.textures[2] = textures.birdUpFlap;
 }
 
 void DrawFrame()
@@ -93,16 +98,30 @@ void DrawFrame()
   // Setup the back buffer for drawing (clear color and depth buffers)
   ClearBackground(BLACK);
 
-  float backgroundSize = 0;
+  game.frame += GetFrameTime();
 
-  while (backgroundSize < SCREEN_WIDTH) {
+  float backgroundSize = 0;
+  float backgroundScale = (float)SCREEN_HEIGHT / textures.background.height;
+
+  while (backgroundSize < SCREEN_WIDTH)
+  {
     // Draw the background texture
-    DrawTextureEx(background.texture, (Vector2){backgroundSize, 0}, 0, background.scale, WHITE);
-    backgroundSize += (float)background.texture.width * background.scale;
+    DrawTextureEx(textures.background, (Vector2){backgroundSize, 0}, 0, backgroundScale, WHITE);
+    backgroundSize += (float)textures.background.width * backgroundScale;
   }
 
-  DrawTextureEx(textures.base, (Vector2){0, SCREEN_HEIGHT - textures.base.height / 2}, 0, 1.0f, WHITE);
-  DrawTextureEx(textures.birdMidFlap, (Vector2){ SCREEN_WIDTH  / 2, SCREEN_HEIGHT / 2}, 0, 1.0f, WHITE);
+  DrawPipe();
+
+  float baseSize = 0;
+
+  while (baseSize < SCREEN_WIDTH)
+  {
+    // Draw the base texture
+    DrawTextureEx(textures.base, (Vector2){baseSize, SCREEN_HEIGHT - textures.base.height / 2}, 0, 1.0f, WHITE);
+    baseSize += (float)textures.base.width;
+  }
+
+  DrawBird();
   // end the frame and get ready for the next one  (display frame, poll input, etc...)
   EndDrawing();
 }
@@ -113,6 +132,8 @@ void EndGame()
   UnloadTexture(textures.background);
   UnloadTexture(textures.base);
   UnloadTexture(textures.birdMidFlap);
+  UnloadTexture(textures.birdDownFlap);
+  UnloadTexture(textures.birdUpFlap);
 
   // destroy the window and cleanup the OpenGL context
   CloseWindow();
