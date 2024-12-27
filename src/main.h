@@ -7,6 +7,10 @@
 #define SCREEN_HEIGHT 500
 #define MAX_PIPES 5
 #define BIRD_TEXTURES 3
+#define DEFAULT_PIPE_X SCREEN_WIDTH
+#define DEFAULT_PIPE_Y SCREEN_HEIGHT / 2
+#define PIPE_SCALE 1.4
+#define PIPES_CENTER_OFFSET 100
 
 typedef struct Textures
 {
@@ -32,11 +36,12 @@ typedef struct Bird
   Texture2D textures[BIRD_TEXTURES];
 } Bird;
 
-typedef struct Pipe
+typedef struct PipeState
 {
-  int pipeVerticalGap;
-  int pipeHorizontalGap;
-} Pipe;
+  float speed;
+  float verticalGap;
+  float horizontalGap;
+} PipeState;
 
 typedef enum GameState
 {
@@ -50,12 +55,15 @@ typedef struct Game {
   int score;
   int highScore;
   float frame;
+  float startFrame;
+  int lastPipeIndex;
 } Game;
 
 extern Bird bird;
 extern Game game;
 extern Textures textures;
-extern Texture2D pipes[5];
+extern PipeState pipeState;
+extern Vector2 pipes[MAX_PIPES];
 
 void InitGame();
 void DrawFrame();

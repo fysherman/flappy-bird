@@ -11,6 +11,7 @@
 	"C_Cpp.errorSquiggles": "enabled",
 	"files.associations": {
 		"raylib.h": "c",
-		"main.h": "c"
+		"main.h": "c",
+		"pipe.h": "c"
 	}
 }

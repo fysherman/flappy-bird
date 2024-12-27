@@ -35,9 +35,16 @@ Textures textures;
 
 Texture2D birdTextures[3];
 
-Game game = {START, 0, 0, 0};
+Game game = {START, 0, 0, 0, 0, 0};
 
-Pipe pipe = {100, 200};
+PipeState pipeState = {1.5, 100, 200};
+
+Vector2 pipes[MAX_PIPES] = {
+    {DEFAULT_PIPE_X, DEFAULT_PIPE_Y},
+    {DEFAULT_PIPE_X, DEFAULT_PIPE_Y},
+    {DEFAULT_PIPE_X, DEFAULT_PIPE_Y},
+    {DEFAULT_PIPE_X, DEFAULT_PIPE_Y},
+    {DEFAULT_PIPE_X, DEFAULT_PIPE_Y}};
 
 Bird bird = {
     {(float)SCREEN_WIDTH / 2, (float)SCREEN_HEIGHT / 2},
@@ -48,8 +55,6 @@ Bird bird = {
     7.0f,
     0.2f,
     {{0, 0}, {0, 0}, {0, 0}}};
-
-pipes[MAX_PIPES];
 
 int main()
 {

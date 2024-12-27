@@ -4,7 +4,8 @@
 
 Texture2D GetTexture()
 {
-  if (game.state == OVER) return bird.textures[0];
+  if (game.state == OVER)
+    return bird.textures[0];
 
   const int textureIndex = (int)(game.frame / bird.flapSpeed) % BIRD_TEXTURES;
 
@@ -16,6 +17,10 @@ void DrawBird()
   // Speed handle
   if (IsKeyPressed(KEY_SPACE))
   {
+    if (game.state == START)
+    {
+      game.startFrame = game.frame;
+    }
     game.state = PLAYING;
     bird.speed = bird.velocity;
   }
