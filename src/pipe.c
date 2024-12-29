@@ -5,7 +5,7 @@
 
 bool CheckPipeVisible(int index)
 {
-  return (bool)(pipes[index].x + textures.pipeGreen.width * PIPE_SCALE > 0 || pipes[index].x < SCREEN_WIDTH);
+  return (bool)(pipes[index].x + textures.pipeGreen.width * PIPE_SCALE > 0 && pipes[index].x < SCREEN_WIDTH);
 }
 
 int FindFarthestPipe()
@@ -46,12 +46,6 @@ void DrawPipe()
     return;
   }
 
-  if (game.state == OVER)
-  {
-    return;
-  }
-
-  printf("🚀 ~ game.frame - game.startFrame: %f\n", game.frame - game.startFrame);
   if (game.frame - game.startFrame < 3)
     return;
 
@@ -72,17 +66,36 @@ void DrawPipe()
 
   for (int i = 0; i < MAX_PIPES; i++)
   {
-    printf("Pipe %d: %f, %f, %d\n", i, pipes[i].x, pipes[i].y, CheckPipeVisible(i));
     if (!CheckPipeVisible(i) && pipes[i].x < 0)
       continue;
-
-    pipes[i].x -= pipeState.speed;
 
     /* code */
     const float x1 = (float)pipes[i].x + width;
     const float x2 = (float)pipes[i].x;
     const float y1 = (float)pipes[i].y - pipeState.verticalGap / 2;
     const float y2 = (float)pipes[i].y + pipeState.verticalGap / 2;
+
+    if (game.state == PLAYING)
+    {
+      // if (
+      //     CheckCollisionRecs(
+      //         (Rectangle){bird.position.x, bird.position.y, bird.textures[0].width, bird.textures[0].height},
+      //         (Rectangle){x2, 0, width, height - y1})
+
+      //     || CheckCollisionRecs(
+      //            (Rectangle){bird.position.x, bird.position.y, bird.textures[0].width, bird.textures[0].height},
+      //            (Rectangle){x2, y2, width, SCREEN_HEIGHT - y2}))
+
+      // {
+      //   game.state = OVER;
+      // }
+      // else
+      // {
+
+      //   pipes[i].x -= pipeState.speed;
+      // }
+      pipes[i].x -= pipeState.speed;
+    }
 
     DrawTexturePro(
         textures.pipeGreen,

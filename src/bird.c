@@ -39,12 +39,14 @@ void DrawBird()
 
   Texture2D birdTexture = GetTexture();
 
-  if (birdTexture.height + bird.position.y >= SCREEN_HEIGHT - textures.base.height / 2)
-  {
+  // Collision base
+  if (CheckCollisionRecs(
+    (Rectangle){bird.position.x, bird.position.y, birdTexture.width, birdTexture.height},
+    (Rectangle){0, SCREEN_HEIGHT - textures.base.height / 2, SCREEN_WIDTH, textures.base.height / 2}
+  )) {
     game.state = OVER;
   }
 
-  // Collision base detection
   if (game.state == PLAYING)
   {
     bird.position.y -= bird.speed;
