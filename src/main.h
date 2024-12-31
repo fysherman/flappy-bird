@@ -11,6 +11,9 @@
 #define DEFAULT_PIPE_Y SCREEN_HEIGHT / 2
 #define PIPE_SCALE 1.4
 #define PIPES_CENTER_OFFSET 100
+#define PIPE_DIFFICULTY_SCALE 0.01
+#define PIPES_MIN_VERTICAL_GAP 90
+#define PIPES_MIN_HORIZONTAL_GAP 0
 
 typedef struct Textures
 {
@@ -50,7 +53,8 @@ typedef enum GameState
   OVER,
 } GameState;
 
-typedef struct Game {
+typedef struct Game
+{
   GameState state;
   int score;
   int highScore;

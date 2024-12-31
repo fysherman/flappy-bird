@@ -37,7 +37,7 @@ Texture2D birdTextures[3];
 
 Game game = {START, 0, 0, 0, 0, 0};
 
-PipeState pipeState = {1.5, 100, 200};
+PipeState pipeState = {1.5, 100, 90, 200, 0, 0.01};
 
 Vector2 pipes[MAX_PIPES] = {
     {DEFAULT_PIPE_X, DEFAULT_PIPE_Y},

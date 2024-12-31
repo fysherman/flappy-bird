@@ -95,6 +95,16 @@ void DrawPipe()
       //   pipes[i].x -= pipeState.speed;
       // }
       pipes[i].x -= pipeState.speed;
+
+      if (pipeState.horizontalGap > PIPES_MIN_HORIZONTAL_GAP)
+      {
+        pipeState.horizontalGap -= PIPE_DIFFICULTY_SCALE;
+      }
+
+      if (pipeState.verticalGap > PIPES_MIN_VERTICAL_GAP)
+      {
+        pipeState.verticalGap -= PIPE_DIFFICULTY_SCALE;
+      }
     }
 
     DrawTexturePro(
@@ -111,5 +121,9 @@ void DrawPipe()
         (Vector2){0, 0},
         0,
         WHITE);
+
+    if (game.state == PLAYING)
+    {
+    }
   }
 }
